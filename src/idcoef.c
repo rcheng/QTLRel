@@ -28,7 +28,6 @@
 #endif
 FILE *FOPEN(const char *filename, const char *type);
 
-int stopIt = 0;
 int fseekerr;
 size_t frwsize;
 int counter;
@@ -46,7 +45,6 @@ double phi22();
 void idcoefw();
 void idcoefr();
 void genMatr();
-void userInt(int);
 
 /*************************************************************************
    pedigree: nr by nc array with (id,father,mother,...)
@@ -625,10 +623,5 @@ double phi22(int a, int b, int c, int d, int** ped, int* top, FILE** ifs)
             phi22(ped[a-1][2], b, ped[a-1][1], d, ped, top, ifs)) / 4.0);
 
    return ((phi22(ped[a-1][1],b,c,d,ped, top, ifs) + phi22(ped[a-1][2],b,c,d,ped, top, ifs)) / 2.0);
-}
-
-void userInt(int sig){
-//   Rprintf("\n   Exit without finish.\a\n");
-   stopIt = 1;
 }
 

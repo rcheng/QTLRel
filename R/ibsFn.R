@@ -22,6 +22,7 @@ ibs.1<- function(prdat){
    nc<- dim(prdat)[3]
    npairs<- nr*(nr+1)/2
 
+   cat("  Please wait or press 'ctrl-c' to abort...\n")
    ibsc<- matrix(-1,nrow=npairs,ncol=9)
    out<- .C("ibsPrc",
             prdat=as.double(aperm(prdat, c(3,2,1))),
@@ -68,6 +69,7 @@ ibs.2<- function(gdat){
    nc<- ncol(gdata)
    npairs<- nr*(nr+1)/2
 
+   cat("  Please wait or press 'ctrl-c' to abort...\n")
    ibsc<- matrix(-1,nrow=npairs,ncol=9)
    out<- .C("ibsFnc",
             gdat=as.integer(t(gdata)),
@@ -120,6 +122,7 @@ genMatrix.default<- function(x){
    nc<- ncol(gdata)
    npairs<- nr*(nr+1)/2
 
+   cat("  Please wait or press 'ctrl-c' to abort...\n")
    deltac<- matrix(-1,nrow=npairs,ncol=5)
    out<- .C("deltaFnc",
             x=as.integer(t(gdata)),

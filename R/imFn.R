@@ -183,6 +183,7 @@ genoPr0<- function(mdat,nn,dist,pos,at,gr,method,verbose){
    np<- length(pos);
    pdat<- rep(-1,3*np)
    err<- TRUE
+   cat("  Please wait or press 'ctrl-c' to abort...\n")
    out<- .C("conGenoPrc",
             mdat=as.integer(mdat[nn,]),
             n=as.integer(n),

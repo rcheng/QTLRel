@@ -41,6 +41,12 @@ typedef long long LONGLONG;
 
 ////////////////////////////////////////////////////
 
+static int stopIt = 0;
+static void userInt(int sig){
+//   Rprintf("\n   Exit without finish.\a\n");
+   stopIt = 1;
+}
+
 /*
 void itoa(int i,char buff[],int base=10);
 template <class T>
