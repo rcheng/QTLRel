@@ -11,4 +11,4 @@ Suggests: lattice, qtl
 LazyLoad: yes
 LazyData: no
 License: GPL (>= 2)
-Packaged: 2011-10-02 09:43:04 UTC; rcheng
+
