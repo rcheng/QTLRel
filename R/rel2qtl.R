@@ -72,8 +72,10 @@ function(gdat, pdat, gmap)
   class(cross) <- c("f2", "cross")
 
   # need to jitter map to move markers apart?
-  if(any(sapply(cross$geno, function(a) any(diff(a$map)==0))))
-    cross <- jittermap(cross)
+  if(any(sapply(cross$geno, function(a) any(diff(a$map)==0)))) {
+    require(qtl) # need R/qtl package for this
+    cross <- qtl:::jittermap(cross)
+  }
 
   # find sex column, convert to 2-level factor
   # (had a problem with the levels being "", "F", "M")
