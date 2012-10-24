@@ -88,3 +88,5 @@ function(gdat, pdat, gmap)
 
   cross
 }
+
+# end of rel2qtl.R
