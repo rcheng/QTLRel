@@ -9,6 +9,8 @@ export(aicVC,mAIC,
 	pkolm,qkolm,qqPlot,plotit,plot.scanTwo,
       cic,ibs,kinship,genMatrix)
 
+export(rel2qtl, qtl2rel)
+
 importFrom(gdata, "reorder.factor")
 importFrom(gdata, "trim")
 
