@@ -48,6 +48,7 @@ scanOne.0 <-
       names(model.par)<- prdat$snp
    P<- rep(Inf,nsnp)
       names(P)<- prdat$snp
+   V<- P
    if(is.null(intcovar)){
       if(!missing(x)){
          oTmp<- data.frame(y=y,x)
@@ -67,6 +68,7 @@ scanOne.0 <-
             g<- lmGls(y~.,data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
+            V[k]<- sum(g$res^2)
          }
          P<- 2*(P-P0)
       }else{
@@ -80,8 +82,11 @@ scanOne.0 <-
             g<- lmGls(y~.,data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
+            V[k]<- sum(g$res^2)
          }
       }
+      V<- sum(g0$res^2) - V
+         V<- V/sum(anova(g0)[,"Sum Sq"])
    }else{
       if(!missing(x)){
          oTmp<- data.frame(y=y,x,intcovar)
@@ -106,6 +111,7 @@ scanOne.0 <-
             g<- lmGls(formula(str),data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
+            V[k]<- sum(g$res^2)
          }
          P<- 2*(P-P0)
       }else{
@@ -124,14 +130,18 @@ scanOne.0 <-
             g<- lmGls(formula(str),data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
+            V[k]<- sum(g$res^2)
          }
       }
+      V<- sum(g0$res^2) - V
+         V<- V/sum(anova(g0)[,"Sum Sq"])
    }
 
    list(snp=prdat$snp,
         chr=prdat$chr,
         dist=prdat$dist,
         p=P,
+        v=V*100,
         parameters=model.par)
 }
 
@@ -155,6 +165,7 @@ scanOne.1 <-
       names(model.par)<- prdat$snp
    P<- rep(Inf,nsnp)
       names(P)<- prdat$snp
+   V<- P
    if(is.null(intcovar)){
       if(!missing(x)){
          oTmp<- data.frame(y=y,x)
@@ -174,6 +185,7 @@ scanOne.1 <-
             g<- lmGls(y~.,data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
+            V[k]<- sum(g$res^2)
          }
          P<- 2*(P-P0)
       }else{
@@ -187,8 +199,11 @@ scanOne.1 <-
             g<- lmGls(y~.,data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
+            V[k]<- sum(g$res^2)
          }
       }
+      V<- sum(g0$res^2) - V
+         V<- V/sum(anova(g0)[,"Sum Sq"])
    }else{
       if(!missing(x)){
          oTmp<- data.frame(y=y,x,intcovar)
@@ -213,6 +228,7 @@ scanOne.1 <-
             g<- lmGls(formula(str),data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
+            V[k]<- sum(g$res^2)
          }
          P<- 2*(P-P0)
       }else{
@@ -231,14 +247,18 @@ scanOne.1 <-
             g<- lmGls(formula(str),data=oTmp,A=gcv)
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
+            V[k]<- sum(g$res^2)
          }
       }
+      V<- sum(g0$res^2) - V
+         V<- V/sum(anova(g0)[,"Sum Sq"])
    }
 
    list(snp=prdat$snp,
         chr=prdat$chr,
         dist=prdat$dist,
         p=P,
+        v=V*100,
         parameters=model.par)
 }
 
@@ -267,6 +287,7 @@ scanOne.2 <-
       names(model.par)<- colnames(gdat)
    P<- rep(Inf,nsnp)
       names(P)<- colnames(gdat)
+   V<- P
    if(is.null(intcovar)){
       if(!missing(x)){
          oTmp<- data.frame(y=y,x)
@@ -286,6 +307,7 @@ scanOne.2 <-
             g<- lmGls(y~.,data=oTmp,A=gcv)
             model.par[[j]]<- g$coef
             P[j]<- logLik(g)
+            V[j]<- sum(g$res^2)
          }
          P<- 2*(P - P0)
       }else{
@@ -299,8 +321,11 @@ scanOne.2 <-
             g<- lmGls(y~.,data=oTmp,A=gcv)
             model.par[[j]]<- g$coef
             P[j]<- anova(g0,g,test=test)$P[2]
+            V[j]<- sum(g$res^2)
          }
       }
+      V<- sum(g0$res^2) - V
+         V<- V/sum(anova(g0)[,"Sum Sq"])
    }else{
       if(!missing(x)){
          oTmp<- data.frame(y=y,x,intcovar)
@@ -324,6 +349,7 @@ scanOne.2 <-
             g<- lmGls(formula(str),data=oTmp,A=gcv)
             model.par[[j]]<- g$coef
             P[j]<- logLik(g)
+            V[j]<- sum(g$res^2)
          }
          P<- 2*(P-P0)
       }else{
@@ -341,11 +367,15 @@ scanOne.2 <-
             g<- lmGls(formula(str),data=oTmp,A=gcv)
             model.par[[j]]<- g$coef
             P[j]<- anova(g0,g,test=test)$P[2]
+            V[j]<- sum(g$res^2)
          }
       }
+      V<- sum(g0$res^2) - V
+         V<- V/sum(anova(g0)[,"Sum Sq"])
    }
 
    list(p=P,
+        v=V*100,
         parameters=model.par)
 }
 

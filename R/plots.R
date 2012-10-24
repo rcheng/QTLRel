@@ -134,20 +134,30 @@ plotit<- function(lrt,cv,bychr=FALSE,chr.labels=TRUE,
       }
 
       if(ngr>1){
-         if(is.null(lty)) lty<- 1:5; lty<- rep(lty,ngr)[1:ngr]
-         if(is.null(col)) col<- 1:6; col<- rep(col,ngr)[1:ngr]
+         if(is.null(lty)){
+            lty<- 1:5
+            lty<- rep(lty,ngr)[1:ngr]
+         }
+         if(is.null(col)){
+            col<- 1:ngr
+         }
          pch<- rep(pch,ngr); pch<- pch[1:ngr]
          cex<- rep(cex,ngr); cex<- cex[1:ngr]
-      }else if(is.null(col)) col<- rep(1,length(lrt$dist))
-      colTmp<- matrix(col,ncol=ngr,byrow=FALSE)
+      }else{
+         if(is.null(col)) col<- 1
+      }
+      if(length(col) < length(lrt$dist))
+         colTmp<- col[match(lrt$group, groups)]
+      else colTmp<- col
 
       min.p<- matrix(NA,nrow=ngr,ncol=nchr)
       for(g in 1:ngr){
          idx0<- lrt$group==groups[g]
          lrt0<- lrt[idx0,]
+         col0<- colTmp[idx0]
          for(i in 1:nchr){
             idx<- lrt0$chr==chr[i]
-            lines(lrt0$dist[idx],lrt0$y[idx],type=type,lty=lty[g],col=colTmp[idx,g],pch=pch[g],cex=cex[g],...)
+            lines(lrt0$dist[idx],lrt0$y[idx],type=type,lty=lty[g],col=col0[idx],pch=pch[g],cex=cex[g],...)
          }
          idx<- c(TRUE,lrt0$chr[-length(lrt0$chr)]!=lrt0$chr[-1])
          min.p[g,]<- lrt0$dist[idx]

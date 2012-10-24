@@ -108,14 +108,14 @@ pedRecode <- function(ped,ids){
          ii<- ii[!is.na(ii)]
       if(length(ii)>0) if(any(ped$sex[ii]!=1 & ped$sex[ii]!="M")){
          cat("   Suppose 1 or \"M\" stands for male...\n")
-         print(ped[ii,])
+         print(ped[ii,][ped$sex[ii]!=1 & ped$sex[ii]!="M",])
          stop("   Check above sires for errors in sex.")
       }
       jj<- match(ped$dam,ped$id)
          jj<- jj[!is.na(jj)]
       if(length(jj)>0) if(any(ped$sex[jj]==1 || ped$sex[jj]=="M")){
          cat("   Suppose !0 or \"!M\" stands for female...\n")
-         print(ped[jj,])
+         print(ped[jj,][ped$sex[jj]==1 || ped$sex[jj]=="M",])
          stop("   Check above dams for errors in sex.")
       }
    }

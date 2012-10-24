@@ -43,8 +43,8 @@ qtlVar<- function(lrt,prdat,simulation=FALSE,nsim=25){
 
          vv[ii]<- var(tmp1) + mean(tmp2)
       }else{# simulation method -- takes time
-         vr<- rep(NA,100)
-         for(i in 1:100){
+         vr<- rep(NA,nsim)
+         for(i in 1:nsim){
             vr.<- rep(NA,nrow(prd))
             pr.<- runif(nrow(prd), min=0, max=1)
             idx1<- pr. <= prd[,1]

@@ -134,7 +134,7 @@ genoProb.default <-
    distTmp<- NULL
    snpTmp<- NULL
    if(verbose) cat("Processing...")
-   cat("  Please wait or press 'ctrl-c' to abort...\n")
+#   cat("  Please wait or press 'ctrl-c' to abort...\n")
    for(i in 1:length(chrs)){
       ii<- chrs[i]
       if(verbose) cat(ii,"...")

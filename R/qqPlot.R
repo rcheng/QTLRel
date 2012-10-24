@@ -151,13 +151,13 @@ qqPlot.default <- function(y, x = "norm", ...,
          qL <- qFn(pxL,sx)
          qU <- qFn(pxU,sx)
       }
+   }
 
-      if (qqline != "none"){
-         Q.x <- quantile(sx, c(.25,.75))
-         Q.y <- quantile(sy, c(.25,.75))
-         b <- (Q.y[2] - Q.y[1])/(Q.x[2] - Q.x[1])
-         a <- Q.y[1] - b*Q.x[1]
-      }
+   if (qqline != "none"){
+      Q.x <- quantile(sx, c(.25,.75))
+      Q.y <- quantile(sy, c(.25,.75))
+      b <- (Q.y[2] - Q.y[1])/(Q.x[2] - Q.x[1])
+      a <- Q.y[1] - b*Q.x[1]
    }
    if (plot.it){
       if(confidence){
