@@ -51,6 +51,7 @@ It is possible to extend the Haley-Knott approach to multiple-allelic cases unde
 \value{
 A list with at least the following components:
    \item{p}{P-value at the snp (marker) if \code{test} is "F" or "Chisq", or the log-likelihood ratio statistic at the SNP (marker) if "test" is "None"}
+   \item{v}{Percentage of variation explained by QTL related effects at the snp (marker)}
    \item{parameters}{estimated parameters at all scanning loci, including additive effect \code{a} and dominance effect \code{d} if \code{prdat} is not NULL}
 }
 \references{
