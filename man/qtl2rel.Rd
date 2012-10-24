@@ -23,11 +23,10 @@ qtl2rel(cross)
 }
 
 \details{
-  The input cross must by an intercross (class \code{"f2"}).  X
-  chromosome data is omitted.
+  The input cross must by an intercross (class \code{"f2"}).
 
-  Simple pedigree information is created, assuming that it's a standard
-  intercross.  
+  Simple pedigree information is created, assuming the data are from a
+  standard intercross.
 }
 
 \author{Karl W Broman, \email{kbroman@biostat.wisc.edu} }

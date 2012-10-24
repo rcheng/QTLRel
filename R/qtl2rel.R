@@ -33,10 +33,13 @@ function(cross)
     sex <- factor(c("F","M")[sexpgm$sex+1], levels=c("F","M"))
   }
 
-  # drop X chromosome
+  # Convert X chromosome genotypes to simple 1/2/3 format
   chrtype <- sapply(cross$geno, class)
-  if(any(chrtype =="X"))
-    cross <- cross[chrtype == "A",]
+  if(any(chrtype =="X")) {
+    # convert to simple 1/2/3 format
+    for(i in which(chrtype=="X")) 
+      cross$geno[[i]]$data <- qtl:::reviseXdata("f2", "simple", sexpgm, geno=cross$geno[[i]]$data)
+  }
 
   # create pedigree info
   parents <- c(-1002, -1001, -102, -101)
