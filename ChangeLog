@@ -1,4 +1,7 @@
 
+2011/10/24 add functions qtl2rel and rel2qtl for converting data between
+   QTLRel and R/qtl formats
+
 2011/09/30 allow user to interrupt of 'cic' in addition to other conveniences
 
 2011/07/21 scanOne is extended to multiple-allelic additive models
