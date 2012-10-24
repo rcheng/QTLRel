@@ -12,7 +12,7 @@ citEntry(entry="article",
          pages = "66",
          
          textVersion = 
-         paste("Cheng R, Abney M, Palmer PP and Skol AD (2011)",
+         paste("Cheng R, Abney M, Palmer AA and Skol AD (2011)",
                "QTLRel: an R Package for Genome-wide Association",
                "Studies in which Relatedness is a Concern.",
                "BMC Genet. 12: 66")
