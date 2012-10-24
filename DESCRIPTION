@@ -23,6 +23,3 @@ Suggests: lattice, qtl
 LazyLoad: yes
 LazyData: no
 License: GPL (>= 2)
-Packaged: 2012-04-03 21:57:01 UTC; rcheng
-Repository: CRAN
-Date/Publication: 2012-04-04 06:21:52
