@@ -4,7 +4,7 @@
 \title{Convert data from QTLRel to R/qtl format}
 
 \description{
-  Convert the data for a QTL mapping experiment from the QTLrel format
+  Convert the data for a QTL mapping experiment from the QTLRel format
   to that used by R/qtl (\url{http://www.rqtl.org}).
 }
 

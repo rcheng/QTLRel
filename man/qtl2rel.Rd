@@ -1,11 +1,11 @@
 \name{qtl2rel}
 \alias{qtl2rel}
 
-\title{Convert data from R/qtl to QTLrel format}
+\title{Convert data from R/qtl to QTLRel format}
 
 \description{
   Convert the data for a QTL mapping experiment from the R/qtl format
-  (see \url{http://www.rqtl.org}) to that used by QTLrel.
+  (see \url{http://www.rqtl.org}) to that used by QTLRel.
 }
 
 \usage{
@@ -19,7 +19,7 @@ qtl2rel(cross)
 \value{
   A list with four components: \code{"ped"} (pedigree information),
   \code{"gdat"} (genotype data), \code{"pdat"} (phenotype data), and
-  \code{"gmap"} (genetic map), in the formats used by QTLrel.
+  \code{"gmap"} (genetic map), in the formats used by QTLRel.
 }
 
 \details{

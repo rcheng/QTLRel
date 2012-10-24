@@ -1,4 +1,4 @@
-# qtl2rel: convert data from R/qtl format to QTLrel format
+# qtl2rel: convert data from R/qtl format to QTLRel format
 #
 # Karl Broman
 # first written: 24 Oct 2012
