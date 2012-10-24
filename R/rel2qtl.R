@@ -77,7 +77,7 @@ function(gdat, pdat, gmap)
 
   # find sex column, convert to 2-level factor
   # (had a problem with the levels being "", "F", "M")
-  sexcol <- grep("sex", names(x$pheno), ignore.case=TRUE)
+  sexcol <- grep("sex", names(cross$pheno), ignore.case=TRUE)
   if(length(sexcol) == 1) { # found sex column
     sex <- cross$pheno[,sexcol]
     if(is.factor(sex) && length(levels(sex)) > 2) {
