@@ -71,7 +71,6 @@ void genMatr();
    //write to file outfs[4]: phi2(a,b), phi3(a,b,c), phi4(a,b,c,d) and phi22(a,b,c,d)
    void phicw(int* pedigree,int* nr,int* nc,int* id,int* nid, int* top, char** infs, char** outfs){
          signal(SIGINT, &userInt);
-
          FILE* ifs[4];
          int i;
          if(top[0]!=-999) for(i=0; i<4; i++){
@@ -102,7 +101,6 @@ void genMatr();
    //store in idcf[,9]
    void phicr(int* pedigree,int* nr,int* nc,int* id,int* nid, int* top, char** infs, double* idcf,int* verbose){
          signal(SIGINT, &userInt);
-
          int i;
          FILE* ifs[4];
          if(top[0]!=-999) for(i=0; i<4; i++){

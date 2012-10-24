@@ -22,7 +22,6 @@ void deltaFn();
 //extern "C"{
    void ibsPrc(double* prA,int* nr,int* nc,double* ibs){
          signal(SIGINT, &userInt);
-
          int nn;
          nn = (*nr)*((*nr)+1)/2;
          double* ptr[(*nr)*3]; for(int i=0; i<(*nr)*3; i++) ptr[i]=prA+i*(*nc);
@@ -35,7 +34,6 @@ void deltaFn();
 
    void ibsFnc(int* gdat,int* nr,int* nc,double* ibs){
          signal(SIGINT, &userInt);
-
          int nn;
          nn = (*nr)*((*nr)+1)/2;
          int* gdatp[(*nr)]; for(int i=0;i<(*nr);i++) gdatp[i]=gdat+i*(*nc);
@@ -47,7 +45,6 @@ void deltaFn();
 
    void deltaFnc(int* gdat,int* nr,int* nc,double* delta){
          signal(SIGINT, &userInt);
-
          int nn;
          nn = (*nr)*((*nr)+1)/2;
          int* gdatp[(*nr)]; for(int i=0;i<(*nr);i++) gdatp[i]=gdat+i*(*nc);
@@ -85,43 +82,43 @@ void ibs_Pr(double P2[][3], double P3[][3][3], double P4[][3][3][3], double P22[
 }
 
 void ibsPr(double*** prA,int nr,int nc,double** ibs){
+   if(stopIt) return;
    double Pa[3] = {1.0, 0.5, 0.0};
    double P2[3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
-         if(stopIt) return;
          P2[i][j] = Pa[i]*Pa[j]
                  + (1-Pa[i])*(1-Pa[j]);
       }
    }
+   if(stopIt) return;
    double P3[3][3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
          for(int k=0; k<3; k++){
-            if(stopIt) return;
             P3[i][j][k] = Pa[i]*Pa[j]*Pa[k]
                        + (1-Pa[i])*(1-Pa[j])*(1-Pa[k]);
          }
       }
    }
+   if(stopIt) return;
    double P4[3][3][3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
          for(int k=0; k<3; k++){
             for(int l=0; l<3; l++){
-               if(stopIt) return;
                P4[i][j][k][l] = Pa[i]*Pa[j]*Pa[k]*Pa[l]
                              + (1-Pa[i])*(1-Pa[j])*(1-Pa[k])*(1-Pa[l]);
             }
          }
       }
    }
+   if(stopIt) return;
    double P22[3][3][3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
          for(int k=0; k<3; k++){
             for(int l=0; l<3; l++){
-               if(stopIt) return;
                P22[i][j][k][l] = (Pa[i]*Pa[j] + (1-Pa[i])*(1-Pa[j]))
                                 *(Pa[k]*Pa[l] + (1-Pa[k])*(1-Pa[l]));
             }
@@ -133,6 +130,7 @@ void ibsPr(double*** prA,int nr,int nc,double** ibs){
 //   int npairs = nr*(nr+1)/2;
 
 //   Rprintf("There are %d pairs:\n", npairs);
+   if(stopIt) return;
    for(int a=0;a<nr;a++){
       for(int b=0;b<=a;b++){
          for(int t=0; t<9; t++) ibs[ii][t] = 0.0;

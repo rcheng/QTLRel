@@ -22,6 +22,7 @@
    #define _(String) (String)
 #endif
 #include <R_ext/Print.h> // for Rprintf
+#include <R_ext/Utils.h> //R_CheckUserInterrupt(void)
 
 #include "stdlib.h"
 #include "time.h"
@@ -43,10 +44,16 @@ typedef long long LONGLONG;
 
 static int stopIt = 0;
 static void userInt(int sig){
-//   Rprintf("\n   Exit without finish.\a\n");
-   stopIt = 1;
+	switch (sig) {
+        case SIGINT:
+        case SIGABRT:
+        case SIGTERM:
+			stopIt = 1;
+			Rprintf("...Exiting...\a\n");
+//            return;
+//        default:
+    }
 }
-
 /*
 void itoa(int i,char buff[],int base=10);
 template <class T>
