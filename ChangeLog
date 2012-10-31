@@ -1,4 +1,7 @@
 
+2012/10/30 incorporated the pkolmogorov2x and psmirnov2x functions from R
+	ver 2.15.1, to avoid a harsh warning in R CMD CHECK
+
 2012/10/30 filled in a missing sex value in pedF8 in the miscEx example data
 
 2012/10/24 add functions qtl2rel and rel2qtl for converting data between
