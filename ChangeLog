@@ -1,5 +1,7 @@
 
-2011/10/24 add functions qtl2rel and rel2qtl for converting data between
+2012/10/30 filled in a missing sex value in pedF8 in the miscEx example data
+
+2012/10/24 add functions qtl2rel and rel2qtl for converting data between
    QTLRel and R/qtl formats
 
 2011/09/30 allow user to interrupt of 'cic' in addition to other conveniences
