@@ -185,16 +185,17 @@ genoPr0<- function(mdat,nn,dist,pos,at,gr,method,verbose){
    pdat<- rep(-1,3*np)
    err<- TRUE
    out<- .C("conGenoPrc",
-            mdat=as.integer(mdat[nn,]),
-            n=as.integer(n),
-            dist=as.double(dist),
-            pos=as.double(pos),
-            np=as.integer(np),
-            at=as.integer(at),
-            gr=as.integer(gr),
-            method=as.integer(method),
-            pdat=as.double(pdat),
-            error=as.logical(err));
+            mdat = as.integer(mdat[nn,]),
+            n = as.integer(n),
+            dist = as.double(dist),
+            pos = as.double(pos),
+            np = as.integer(np),
+            at = as.integer(at),
+            gr = as.integer(gr),
+            method = as.integer(method),
+            pdat = as.double(pdat),
+            error = as.logical(err),
+            DUP = FALSE);
    if(verbose)
       if(out$error) cat("individual",nn,"not imputable...")
 

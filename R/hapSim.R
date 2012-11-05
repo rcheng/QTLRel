@@ -202,18 +202,18 @@ pedRecode.0<- function(ped){
 #######################################
 # the follow code generate genotype data chrosomome by chromosome
 
-.hapSim<- function(ped,gmap,ids,hap.data,method=c("Haldane","Kosambi"),recode.pedigree=FALSE,genotype=FALSE){
+.hapSim<- function(ped,gmap,ids,hap,method=c("Haldane","Kosambi"),recode.pedigree=FALSE,genotype=FALSE){
    if(recode.pedigree){
       idTmp<- ped$id
       ped<- pedRecode(ped)
-      if(!missing(hap.data)){
-         if(any(hap.data<0)) stop("hap.data: Use non-negative integers for alleles.")
-         if(any(hap.data>2^15-1)) stop("hap.data: Too large integers.")
+      if(!missing(hap)){
+         if(any(hap<0)) stop("hap: Use non-negative integers for alleles.")
+         if(any(hap>2^14)) stop("hap: Too large integers.")
          idx<- ped$generation=="F0" | ped$generation=="0"
          if(!any(idx)) stop("check pedigree for errors in founders' generation.")
-            idx<- match(ped$old.id[idx],idTmp[1:nrow(hap.data)])
-         if(length(idx)>nrow(hap.data)) stop("haplotypes are not specified for all founders?")
-         hap.data<- hap.data[idx,]
+            idx<- match(ped$old.id[idx],idTmp[1:nrow(hap)])
+         if(length(idx)>nrow(hap)) stop("haplotypes are not specified for all founders?")
+         hap<- hap[idx,]
       }
    }
    if(!is.data.frame(gmap) || any(!is.element(c("snp","chr","dist"),colnames(gmap)))){
@@ -247,21 +247,22 @@ pedRecode.0<- function(ped){
    for(n in 1:nchr){
       seed<- runif(1,min=0,max=2^31-1)
          seed<- round(seed,0)
-      tmp<- .hapSim0(ped,gmap,chr[n],hap.data,seed,genotype)
+      tmp<- .hapSim0(ped,gmap,chr[n],hap,seed,genotype)
       out<- cbind(out,tmp)
    }
-   out<- out[ii,]
+   out<- out[ii,];
+      out<- as.matrix(out)
    rownames(out)<- ped$old.id[ii]
    idx<- order(ord)
    if(genotype){
-      out[,idx]
+      as.matrix(out[,idx])
    }else{
       idx<- rbind(idx*2-1,idx*2)
-      out[,idx]
+      as.matrix(out[,idx])
    }
 }
 
-.hapSim0<- function(pedd,gmap,chr,hap.data,seed,genotype){
+.hapSim0<- function(pedd,gmap,chr,hap,seed,genotype){
    pedd<- pedd[,c("id","sire","dam","sex")]
    if(is.numeric(pedd[,"sex"])){
       pedd[,"sex"]<- pedd[,"sex"]==1
@@ -277,9 +278,9 @@ pedRecode.0<- function(ped){
       if(chr=="x" || chr=="X") xchr<- TRUE
    if(missing(seed)) seed<- 0
    gdat<- matrix(-99,nrow=nr,ncol=2*nc)
-   if(!missing(hap.data)){
-      ninit<- nrow(hap.data)
-      gdat[1:ninit,]<- hap.data[,rep(idx,rep(2,length(idx)))]
+   if(!missing(hap)){
+      ninit<- nrow(hap)
+      gdat[1:ninit,]<- hap[,rep(idx,rep(2,length(idx)))]
    }else{
       ninit<- 2
       if(xchr){
@@ -296,12 +297,14 @@ pedRecode.0<- function(ped){
             pedigree = as.integer(t(pedd)),
             recomb = as.double(rr),
             xchr = as.logical(xchr),
-            seed = as.integer(seed))$gdata
+            seed = as.integer(seed),
+            DUP = FALSE)$gdata
    out[out==-99]<- NA
    out<- matrix(out,nrow=nr,byrow=TRUE)
+      storage.mode(out)<- "integer"
 
    if(genotype){
-      oo<- out[,2*(1:nc)-1] + out[,2*(1:nc)]
+      oo<- out[,2*(1:nc)-1] + out[,2*(1:nc)]; oo<- as.matrix(oo)
       if(xchr){
          ii<- as.logical(pedd[,"sex"])
          if(any(out[ii,2*(1:nc)-1]!=0))
@@ -311,6 +314,7 @@ pedRecode.0<- function(ped){
          oo[ii,]<- 2*oo[ii,]
       }
       oo<- oo-1
+      storage.mode(oo)<- "integer"
       colnames(oo)<- gmap$snp[gmap$chr==chr]
       oo
    }else{
@@ -318,31 +322,47 @@ pedRecode.0<- function(ped){
    }
 }
 
-hapSim<- function(ped,gmap,ids,hap.data,method=c("Haldane","Kosambi"),recode.pedigree=FALSE){
+hapSim<- function(ped,gmap,ids,hap,method=c("Haldane","Kosambi"),recode.pedigree=FALSE){
 # ped: recoded pedigree
 # gmap: genetic map (snp,chr,recom,dist,...)
-# hap.data: founders' haplotypes
+# hap: founders' haplotypes
 # ids: only output data for individuals with ID ids
+   if(missing(gmap)){
+      gmap<- data.frame(snp="N",chr="N",dist=0)
+      if(!missing(hap)){
+         hap<- as.matrix(hap)
+         if(ncol(hap) < 2) stop("hap should have at least 2 columns.")
+         hap<- hap[,1:2]
+      }
+   }
    out<- .hapSim(ped = ped,
                 gmap = gmap,
                 ids = ids,
-                hap.data = hap.data,
+                hap = hap,
                 method = method,
                 recode.pedigree = recode.pedigree,
                 genotype = FALSE)
    out
 }
 
-genoSim<- function(ped,gmap,ids,hap.data,method=c("Haldane","Kosambi"),recode.pedigree=FALSE){
+genoSim<- function(ped,gmap,ids,hap,method=c("Haldane","Kosambi"),recode.pedigree=FALSE){
 # ped: recoded pedigree
 # gmap: genetic map (snp,chr,recom,dist,...)
 # output: individuals by SNPs
 #   for each SNP 1--AA, 2--AB,3--BB
 # ids: only output data for individuals with ID ids
+   if(missing(gmap)){
+      gmap<- data.frame(snp="N",chr="N",dist=0)
+      if(!missing(hap)){
+         hap<- as.matrix(hap)
+         if(ncol(hap) < 2) stop("hap should have at least 2 columns.")
+         hap<- hap[,1:2]
+      }
+   }
    out<- .hapSim(ped = ped,
                 gmap = gmap,
                 ids = ids,
-                hap.data = hap.data,
+                hap = hap,
                 method = method,
                 recode.pedigree = recode.pedigree,
                 genotype = TRUE)

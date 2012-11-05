@@ -39,6 +39,12 @@ scanOne.0 <-
 # prdat$pr: n by ? by ? matrix, allele probabilities
 # vc: object from estVC or aicVC
 # test: “Chisq”, “F” or “Cp”
+   diag.cov<- diag(cov)
+   if( max( abs( cov-diag(diag.cov) ) ) < min(1e-5,1e-5*max(diag.cov)) ){
+      if( max(diag.cov-min(diag.cov)) < min(1e-5,1e-5*max(diag.cov)) ){
+         weights<- NULL
+      }else weights<- 1/diag.cov
+   }else weights<- NA
    gcv<- W.inv(cov)
    test<- match.arg(test)
 
@@ -55,7 +61,11 @@ scanOne.0 <-
       }else{
          oTmp<- data.frame(y=y)
       }
-      g0<- lmGls(y~.,data=oTmp,A=gcv)
+      if( !is.null(weights[1]) && is.na(weights[1]) ){
+         g0<- lmGls(y~.,data=oTmp,A=gcv)
+      }else{
+         g0<- lm(y~.,data=oTmp,weights=weights)
+      }
       if(test=="None"){
          P0<- logLik(g0)
          for(k in 1:nsnp){
@@ -65,7 +75,11 @@ scanOne.0 <-
                oTmp<- data.frame(y=y,a=prdat$pr[,-1,k])
             }
 
-            g<- lmGls(y~.,data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(y~.,data=oTmp,A=gcv)
+            }else{
+               g<- lm(y~.,data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
             V[k]<- sum(g$res^2)
@@ -79,7 +93,11 @@ scanOne.0 <-
                oTmp<- data.frame(y=y,prdat$pr[,-1,k])
             }
 
-            g<- lmGls(y~.,data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(y~.,data=oTmp,A=gcv)
+            }else{
+               g<- lm(y~.,data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
             V[k]<- sum(g$res^2)
@@ -93,7 +111,11 @@ scanOne.0 <-
       }else{
          oTmp<- data.frame(y=y,intcovar)
       }
-      g0<- lmGls(y~.,data=oTmp,A=gcv)
+      if( !is.null(weights[1]) && is.na(weights[1]) ){
+         g0<- lmGls(y~.,data=oTmp,A=gcv)
+      }else{
+         g0<- lm(y~.,data=oTmp,weights=weights)
+      }
       if(test=="None"){
          P0<- logLik(g0)
          for(k in 1:nsnp){
@@ -102,13 +124,17 @@ scanOne.0 <-
             }else{
                oTmp<- data.frame(y=y,intcovar,prdat$pr[,-1,k])
             }
-            nc<- ncol(oTmp)
-            str<- paste(paste("(",paste(colnames(oTmp)[nc-1-(nint:1)],collapse="+"),")",sep=""),
-                        paste("(",paste(colnames(oTmp)[(nc-1):nc],collapse="+"),")",sep=""),
+            nc<- ncol(oTmp); nq<- ncol(prdat$pr[,-1,k])-1
+            str<- paste(paste("(",paste(colnames(oTmp)[nc-nq-(nint:1)],collapse="+"),")",sep=""),
+                        paste("(",paste(colnames(oTmp)[(nc-nq):nc],collapse="+"),")",sep=""),
                         sep=":")
             str<- paste("y~.+",str,sep="")
 
-            g<- lmGls(formula(str),data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(formula(str),data=oTmp,A=gcv)
+            }else{
+               g<- lm(formula(str),data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
             V[k]<- sum(g$res^2)
@@ -121,13 +147,17 @@ scanOne.0 <-
             }else{
                oTmp<- data.frame(y=y,intcovar,prdat$pr[,-1,k])
             }
-            nc<- ncol(oTmp)
-            str<- paste(paste("(",paste(colnames(oTmp)[nc-1-(nint:1)],collapse="+"),")",sep=""),
-                        paste("(",paste(colnames(oTmp)[(nc-1):nc],collapse="+"),")",sep=""),
+            nc<- ncol(oTmp); nq<- ncol(prdat$pr[,-1,k])-1
+            str<- paste(paste("(",paste(colnames(oTmp)[nc-nq-(nint:1)],collapse="+"),")",sep=""),
+                        paste("(",paste(colnames(oTmp)[(nc-nq):nc],collapse="+"),")",sep=""),
                         sep=":")
             str<- paste("y~.+",str,sep="")
 
-            g<- lmGls(formula(str),data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(formula(str),data=oTmp,A=gcv)
+            }else{
+               g<- lm(formula(str),data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
             V[k]<- sum(g$res^2)
@@ -156,6 +186,12 @@ scanOne.1 <-
 # prdat$pr: n by 3 by ? matrix, conditional probabilities
 # vc: object from estVC or aicVC
 # test: “Chisq”, “F” or “Cp”
+   diag.cov<- diag(cov)
+   if( max( abs( cov-diag(diag.cov) ) ) < min(1e-5,1e-5*max(diag.cov)) ){
+      if( max(diag.cov-min(diag.cov)) < min(1e-5,1e-5*max(diag.cov)) ){
+         weights<- NULL
+      }else weights<- 1/diag.cov
+   }else weights<- NA
    gcv<- W.inv(cov)
    test<- match.arg(test)
 
@@ -172,7 +208,11 @@ scanOne.1 <-
       }else{
          oTmp<- data.frame(y=y)
       }
-      g0<- lmGls(y~.,data=oTmp,A=gcv)
+      if( !is.null(weights[1]) && is.na(weights[1]) ){
+         g0<- lmGls(y~.,data=oTmp,A=gcv)
+      }else{
+         g0<- lm(y~.,data=oTmp,weights=weights)
+      }
       if(test=="None"){
          P0<- logLik(g0)
          for(k in 1:nsnp){
@@ -182,7 +222,11 @@ scanOne.1 <-
                oTmp<- data.frame(y=y,a=prdat$pr[,1,k]-prdat$pr[,3,k],d=prdat$pr[,2,k])
             }
 
-            g<- lmGls(y~.,data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(y~.,data=oTmp,A=gcv)
+            }else{
+               g<- lm(y~.,data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
             V[k]<- sum(g$res^2)
@@ -196,7 +240,11 @@ scanOne.1 <-
                oTmp<- data.frame(y=y,a=prdat$pr[,1,k]-prdat$pr[,3,k],d=prdat$pr[,2,k])
             }
 
-            g<- lmGls(y~.,data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(y~.,data=oTmp,A=gcv)
+            }else{
+               g<- lm(y~.,data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
             V[k]<- sum(g$res^2)
@@ -210,7 +258,11 @@ scanOne.1 <-
       }else{
          oTmp<- data.frame(y=y,intcovar)
       }
-      g0<- lmGls(y~.,data=oTmp,A=gcv)
+      if( !is.null(weights[1]) && is.na(weights[1]) ){
+         g0<- lmGls(y~.,data=oTmp,A=gcv)
+      }else{
+         g0<- lm(y~.,data=oTmp,weights=weights)
+      }
       if(test=="None"){
          P0<- logLik(g0)
          for(k in 1:nsnp){
@@ -219,13 +271,17 @@ scanOne.1 <-
             }else{
                oTmp<- data.frame(y=y,intcovar,a=prdat$pr[,1,k]-prdat$pr[,3,k],d=prdat$pr[,2,k])
             }
-            nc<- ncol(oTmp)
-            str<- paste(paste("(",paste(colnames(oTmp)[nc-1-(nint:1)],collapse="+"),")",sep=""),
-                        paste("(",paste(colnames(oTmp)[(nc-1):nc],collapse="+"),")",sep=""),
+            nc<- ncol(oTmp); nq<- ncol(prdat$pr[,-1,k])-1
+            str<- paste(paste("(",paste(colnames(oTmp)[nc-nq-(nint:1)],collapse="+"),")",sep=""),
+                        paste("(",paste(colnames(oTmp)[(nc-nq):nc],collapse="+"),")",sep=""),
                         sep=":")
             str<- paste("y~.+",str,sep="")
 
-            g<- lmGls(formula(str),data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(formula(str),data=oTmp,A=gcv)
+            }else{
+               g<- lm(formula(str),data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- logLik(g)
             V[k]<- sum(g$res^2)
@@ -238,13 +294,17 @@ scanOne.1 <-
             }else{
                oTmp<- data.frame(y=y,intcovar,a=prdat$pr[,1,k]-prdat$pr[,3,k],d=prdat$pr[,2,k])
             }
-            nc<- ncol(oTmp)
-            str<- paste(paste("(",paste(colnames(oTmp)[nc-1-(nint:1)],collapse="+"),")",sep=""),
-                        paste("(",paste(colnames(oTmp)[(nc-1):nc],collapse="+"),")",sep=""),
+            nc<- ncol(oTmp); nq<- ncol(prdat$pr[,-1,k])-1
+            str<- paste(paste("(",paste(colnames(oTmp)[nc-nq-(nint:1)],collapse="+"),")",sep=""),
+                        paste("(",paste(colnames(oTmp)[(nc-nq):nc],collapse="+"),")",sep=""),
                         sep=":")
             str<- paste("y~.+",str,sep="")
 
-            g<- lmGls(formula(str),data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(formula(str),data=oTmp,A=gcv)
+            }else{
+               g<- lm(formula(str),data=oTmp,weights=weights)
+            }
             model.par[[k]]<- g$coef
             P[k]<- anova(g0,g,test=test)$P[2]
             V[k]<- sum(g$res^2)
@@ -275,6 +335,12 @@ scanOne.2 <-
 # vc: object from estVC or aicVC
 # intcover: covariates that interact with QTL
 # test: “Chisq”, “F” or “Cp”
+   diag.cov<- diag(cov)
+   if( max( abs( cov-diag(diag.cov) ) ) < min(1e-5,1e-5*max(diag.cov)) ){
+      if( max(diag.cov-min(diag.cov)) < min(1e-5,1e-5*max(diag.cov)) ){
+         weights<- NULL
+      }else weights<- 1/diag.cov
+   }else weights<- NA
    gcv<- W.inv(cov)
    test<- match.arg(test)
    if(numGeno){
@@ -294,7 +360,11 @@ scanOne.2 <-
       }else{
          oTmp<- data.frame(y=y)
       }
-      g0<- lmGls(y~.,data=oTmp,A=gcv)
+      if( !is.null(weights[1]) && is.na(weights[1]) ){
+         g0<- lmGls(y~.,data=oTmp,A=gcv)
+      }else{
+         g0<- lm(y~.,data=oTmp,weights=weights)
+      }
       if(test=="None"){
          P0<- logLik(g0)
          for(j in 1:nsnp){
@@ -304,7 +374,11 @@ scanOne.2 <-
                oTmp<- data.frame(y=y,snp=num.geno(gdat[,j]))
             }
 
-            g<- lmGls(y~.,data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(y~.,data=oTmp,A=gcv)
+            }else{
+               g<- lm(y~.,data=oTmp,weights=weights)
+            }
             model.par[[j]]<- g$coef
             P[j]<- logLik(g)
             V[j]<- sum(g$res^2)
@@ -318,7 +392,11 @@ scanOne.2 <-
                oTmp<- data.frame(y=y,snp=num.geno(gdat[,j]))
             }
 
-            g<- lmGls(y~.,data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(y~.,data=oTmp,A=gcv)
+            }else{
+               g<- lm(y~.,data=oTmp,weights=weights)
+            }
             model.par[[j]]<- g$coef
             P[j]<- anova(g0,g,test=test)$P[2]
             V[j]<- sum(g$res^2)
@@ -332,7 +410,11 @@ scanOne.2 <-
       }else{
          oTmp<- data.frame(y=y,intcovar)
       }
-      g0<- lmGls(y~.,data=oTmp,A=gcv)
+      if( !is.null(weights[1]) && is.na(weights[1]) ){
+         g0<- lmGls(y~.,data=oTmp,A=gcv)
+      }else{
+         g0<- lm(y~.,data=oTmp,weights=weights)
+      }
       if(test=="None"){
          P0<- logLik(g0)
          for(j in 1:nsnp){
@@ -346,7 +428,11 @@ scanOne.2 <-
             str<- paste(colnames(oTmp)[nc-(nint:1)],colnames(oTmp)[nc],collapse="+",sep=":")
             str<- paste("y~.+",str,sep="")
 
-            g<- lmGls(formula(str),data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(formula(str),data=oTmp,A=gcv)
+            }else{
+               g<- lm(formula(str),data=oTmp,weights=weights)
+            }
             model.par[[j]]<- g$coef
             P[j]<- logLik(g)
             V[j]<- sum(g$res^2)
@@ -364,7 +450,11 @@ scanOne.2 <-
             str<- paste(colnames(oTmp)[nc-(nint:1)],colnames(oTmp)[nc],collapse="+",sep=":")
             str<- paste("y~.+",str,sep="")
 
-            g<- lmGls(formula(str),data=oTmp,A=gcv)
+            if( !is.null(weights[1]) && is.na(weights[1]) ){
+               g<- lmGls(formula(str),data=oTmp,A=gcv)
+            }else{
+               g<- lm(formula(str),data=oTmp,weights=weights)
+            }
             model.par[[j]]<- g$coef
             P[j]<- anova(g0,g,test=test)$P[2]
             V[j]<- sum(g$res^2)
@@ -496,6 +586,12 @@ scanTwo.1 <-
             prdat,
             cov)
 {
+   diag.cov<- diag(cov)
+   if( max( abs( cov-diag(diag.cov) ) ) < min(1e-5,1e-5*max(diag.cov)) ){
+      if( max(diag.cov-min(diag.cov)) < min(1e-5,1e-5*max(diag.cov)) ){
+         weights<- NULL
+      }else weights<- 1/diag.cov
+   }else weights<- NA
    gcv<- W.inv(cov)
    nsnp<- dim(prdat$pr)[3]
    P<- matrix(NA,nrow=nsnp,ncol=nsnp)
@@ -515,8 +611,16 @@ scanTwo.1 <-
                            d2=prdat$pr[,2,k])
          oTmp<- cbind(oTmp.xy, oTmp)
 
-         g0<- lmGls(y~.,data=oTmp,A=gcv)
-         g<- lmGls(y~(a1+d1)*(a2+d2) + .,data=oTmp,A=gcv)
+         if( !is.null(weights[1]) && is.na(weights[1]) ){
+            g0<- lmGls(y~.,data=oTmp,A=gcv)
+         }else{
+            g0<- lm(y~.,data=oTmp,weights=weights)
+         }
+         if( !is.null(weights[1]) && is.na(weights[1]) ){
+            g<- lmGls(y~(a1+d1)*(a2+d2) + .,data=oTmp,A=gcv)
+         }else{
+            g<- lm(y~(a1+d1)*(a2+d2) + .,data=oTmp,weights=weights)
+         }
          P[i,k]<- 2*(logLik(g)-logLik(g0))
       }
    }
@@ -534,6 +638,12 @@ scanTwo.2 <-
    if(numGeno){
       num.geno<- I
    }else num.geno<- as.factor
+   diag.cov<- diag(cov)
+   if( max( abs( cov-diag(diag.cov) ) ) < min(1e-5,1e-5*max(diag.cov)) ){
+      if( max(diag.cov-min(diag.cov)) < min(1e-5,1e-5*max(diag.cov)) ){
+         weights<- NULL
+      }else weights<- 1/diag.cov
+   }else weights<- NA
    gcv<- W.inv(cov)
 
    nsnp<- dim(gdat)[2]
@@ -552,8 +662,16 @@ scanTwo.2 <-
                            snp2=num.geno(gdat[,j]))
          oTmp<- cbind(oTmp.xy, oTmp)
 
-         g0<- lmGls(y~.,data=oTmp,A=gcv)
-         g<- lmGls(y~snp1*snp2 + .,data=oTmp,A=gcv)
+         if( !is.null(weights[1]) && is.na(weights[1]) ){
+            g0<- lmGls(y~.,data=oTmp,A=gcv)
+         }else{
+            g0<- lm(y~.,data=oTmp,weights=weights)
+         }
+         if( !is.null(weights[1]) && is.na(weights[1]) ){
+            g<- lmGls(y~snp1*snp2 + .,data=oTmp,A=gcv)
+         }else{
+            g<- lm(y~snp1*snp2 + .,data=oTmp,weights=weights)
+         }
          P[i,j]<- 2*(logLik(g)-logLik(g0))
       }
    }

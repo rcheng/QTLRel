@@ -7,7 +7,7 @@ Simulate null distribution
 Simulate distribution under the hypothesis of no QTL by permutation (of genotypic data) or gene dropping.
 }
 \usage{
-nullSim(y, x, gdat, prdat, ped, gmap, hap.data,
+nullSim(y, x, gdat, prdat, ped, gmap, hap,
 	method=c("permutation","gene dropping"), vc=NULL, intcovar=NULL,
 	test = c("None","F","Chisq"), minorGenoFreq=0.05, rmv=TRUE,
 	recode.pedigree=FALSE, gr=2, ntimes=10)
@@ -31,8 +31,8 @@ a pedigree, which is a data frame (id, sex, sire, dam, ...). In "sex", male shou
   \item{gmap}{
 a genetic map. Should be data frame (snp, chr, dist, ...), where "snp" is the SNP (marker) name, "chr" is the chromosome where the "snp" is, and "dist" is the genetic distance in centi-Morgan (cM) from the leftmost SNP (marker) on the chromosome. Ignored in the case of permutation.
 }
-  \item{hap.data}{
-founders' haplotype data if not missing. Rows correspond to all founders, which should be in the first places in the pedigree \code{ped}, in the exact order and columns correspond to loci in the genetic map \code{gmap} in the exact order. For an individual, the haplotype should be (f1 m1 f2 m2 ...) where fi is the allele from father at the i-th locus and mi is the allele from mother at the i-th locus. Elements should be non-negative integers that are not larger than 32767. If missing, two founders with alleles 1 and 2 are assumed.
+  \item{hap}{
+founders' haplotype data if not missing. Rows correspond to all founders, which should be in the first places in the pedigree \code{ped}, in the exact order and columns correspond to loci in the genetic map \code{gmap} in the exact order. For an individual, the haplotype should be (f1 m1 f2 m2 ...) where fi is the allele from father at the i-th locus and mi is the allele from mother at the i-th locus. Elements should be non-negative integers that are not larger than 16384. If missing, two founders with alleles 1 and 2 are assumed.
 }
   \item{method}{
 permutation or gene dropping.

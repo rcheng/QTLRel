@@ -219,10 +219,11 @@ kinship<- function(ped,ids){
    ped<- ped[,c("id","sire","dam")]
    ksp<- matrix(-999.9,nrow=nrow(ped),ncol=nrow(ped))
    out<- .C("kinship",
-            ped=as.integer(t(ped)),
-            nr=as.integer(nrow(ped)),
-            nc=as.integer(ncol(ped)),
-            ksp=as.double(ksp))
+            ped = as.integer(t(ped)),
+            nr = as.integer(nrow(ped)),
+            nc = as.integer(ncol(ped)),
+            ksp = as.double(ksp),
+            DUP = FALSE)
    ksp<- matrix(out$ksp,nrow=nrow(ped),byrow=TRUE)
       ksp<- ksp[idx,idx]
       rownames(ksp)<- colnames(ksp)<- trim(as.character(ids))
@@ -298,14 +299,15 @@ cicTmp<- function(ped,ids,inter,df=3,ask=TRUE,verbose=TRUE){
             idTmp<- pedTmp$id[match(idBot,pedTmp$old)]
             pedTmp<- pedTmp[,c("id","sire","dam")]
             tmp<- .C("phicw",
-                     pedigree=as.integer(t(pedTmp)),
-                     nr=as.integer(nrow(pedTmp)),
-                     nc=as.integer(ncol(pedTmp)),
-                     id=as.integer(idTmp),
-                     nid=as.integer(length(idTmp)),
-                     top=as.integer(top),
+                     pedigree = as.integer(t(pedTmp)),
+                     nr = as.integer(nrow(pedTmp)),
+                     nc = as.integer(ncol(pedTmp)),
+                     id = as.integer(idTmp),
+                     nid = as.integer(length(idTmp)),
+                     top = as.integer(top),
                      as.character(infs),
-                     as.character(outfs))
+                     as.character(outfs),
+                     DUP = FALSE)
          }else{
             ids<- trim(ids)
             idx<- match(ids,ped$old)
@@ -313,15 +315,16 @@ cicTmp<- function(ped,ids,inter,df=3,ask=TRUE,verbose=TRUE){
             pedTmp<- pedTmp[,c("id","sire","dam")]
             idcf<- rep(-999.9,length(ids)*(length(ids)+1)/2*9)
             idcf<- .C("phicr",
-                      pedigree=as.integer(t(pedTmp)),
-                      nr=as.integer(nrow(pedTmp)),
-                      nc=as.integer(ncol(pedTmp)),
-                      id=as.integer(idTmp),
-                      nid=as.integer(length(idTmp)),
-                      top=as.integer(top),
+                      pedigree = as.integer(t(pedTmp)),
+                      nr = as.integer(nrow(pedTmp)),
+                      nc = as.integer(ncol(pedTmp)),
+                      id = as.integer(idTmp),
+                      nid = as.integer(length(idTmp)),
+                      top = as.integer(top),
                       as.character(infs),
-                      idcf=as.double(idcf),
-                      verbose=as.integer(verbose))$idcf
+                      idcf = as.double(idcf),
+                      verbose = as.integer(verbose),
+                      DUP = FALSE)$idcf
           }
       }
       if(verbose) cat("Done\n")
@@ -383,15 +386,16 @@ genMatrix.cic<- function(x){
 #   AA<- 2*ksp
 #   MH<- MH - ib%o%ib
    o<- .C("gen_Matrix",
-          x=as.double(t(x)),
-          nr=as.integer(nr),
-          nc=as.integer(nc),
-          nn=as.integer(nn),
-          ksp=as.double(t(ksp)),
-          DD=as.double(t(DD)),
-          AD=as.double(t(AD)),
-          HH=as.double(t(HH)),
-          MH=as.double(t(MH)))
+          x = as.double(t(x)),
+          nr = as.integer(nr),
+          nc = as.integer(nc),
+          nn = as.integer(nn),
+          ksp = as.double(t(ksp)),
+          DD = as.double(t(DD)),
+          AD = as.double(t(AD)),
+          HH = as.double(t(HH)),
+          MH = as.double(t(MH)),
+          DUP = FALSE)
    ksp<- matrix(o$ksp,nrow=nn,byrow=TRUE)
       rownames(ksp)<- colnames(ksp)<- ids
    ib<- diag(ksp)

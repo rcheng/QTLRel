@@ -25,10 +25,11 @@ ibs.1<- function(prdat){
 #   cat("  Please wait or press 'ctrl-c' to abort...\n")
    ibsc<- matrix(-1,nrow=npairs,ncol=9)
    out<- .C("ibsPrc",
-            prdat=as.double(aperm(prdat, c(3,2,1))),
-            nr=as.integer(nr),
-            nc=as.integer(nc),
-            ibsc=as.double(t(ibsc)))
+            prdat = as.double(aperm(prdat, c(3,2,1))),
+            nr = as.integer(nr),
+            nc = as.integer(nc),
+            ibsc = as.double(t(ibsc)),
+            DUP = FALSE)
 
    idcf<- matrix(out$ibsc,ncol=9,byrow=TRUE)
       colnames(idcf)<- paste("d",1:9,sep="")
@@ -72,10 +73,11 @@ ibs.2<- function(gdat){
 #   cat("  Please wait or press 'ctrl-c' to abort...\n")
    ibsc<- matrix(-1,nrow=npairs,ncol=9)
    out<- .C("ibsFnc",
-            gdat=as.integer(t(gdata)),
-            nr=as.integer(nr),
-            nc=as.integer(nc),
-            ibsc=as.double(t(ibsc)))
+            gdat = as.integer(t(gdata)),
+            nr = as.integer(nr),
+            nc = as.integer(nc),
+            ibsc = as.double(t(ibsc)),
+            DUP = FALSE)
 
    idcf<- matrix(out$ibsc,ncol=9,byrow=TRUE)
       colnames(idcf)<- paste("d",1:9,sep="")
@@ -125,10 +127,11 @@ genMatrix.default<- function(x){
 #   cat("  Please wait or press 'ctrl-c' to abort...\n")
    deltac<- matrix(-1,nrow=npairs,ncol=5)
    out<- .C("deltaFnc",
-            x=as.integer(t(gdata)),
-            nr=as.integer(nr),
-            nc=as.integer(nc),
-            deltac=as.double(t(deltac)))
+            x = as.integer(t(gdata)),
+            nr = as.integer(nr),
+            nc = as.integer(nc),
+            deltac = as.double(t(deltac)),
+            DUP = FALSE)
 
    delta<- matrix(out$deltac,ncol=5,byrow=TRUE)
       colnames(delta)<- c("ksp","delta1","delta2","delta35","delta7")

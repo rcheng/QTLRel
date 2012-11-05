@@ -1,5 +1,5 @@
 
-nullSim<- function(y, x, gdat, prdat, ped, gmap, hap.data,
+nullSim<- function(y, x, gdat, prdat, ped, gmap, hap,
 	method=c("permutation","gene dropping"), vc=NULL, intcovar=NULL,
 	test = c("None","F","Chisq"), minorGenoFreq=0.05, rmv=TRUE,
 	recode.pedigree=FALSE, gr=2, ntimes=10){
@@ -15,7 +15,7 @@ nullSim<- function(y, x, gdat, prdat, ped, gmap, hap.data,
 				stop("Not all sample IDs in both 'prdat' and 'ped'?")
 			pos<- gmap
 			for(n in 1:ntimes){
-				gdatTmp<- genoSim(pedR, gmap=gmap, ids=ids, hap.data=hap.data,
+				gdatTmp<- genoSim(pedR, gmap=gmap, ids=ids, hap=hap,
 					method="Haldane", recode.pedigree=FALSE)
 				llkTmp<- scanOne(y=y, x=x, gdat=gdatTmp, vc=vc, intcovar=intcovar,
 					test=test, minorGenoFreq=minorGenoFreq, rmv=rmv)
@@ -30,7 +30,7 @@ nullSim<- function(y, x, gdat, prdat, ped, gmap, hap.data,
 				stop("Not all sample IDs in both 'prdat' and 'ped'?")
 			pos<- data.frame(snp=prdat$snp, chr=prdat$chr, dist=prdat$dist)
 			for(n in 1:ntimes){
-				gdatTmp<- genoSim(pedR, gmap=gmap, ids=ids, hap.data=hap.data,
+				gdatTmp<- genoSim(pedR, gmap=gmap, ids=ids, hap=hap,
 					method="Haldane", recode.pedigree=FALSE)
 				prd<- genoProb(gdatTmp, gmap, gr=gr, pos=pos, method="Haldane", verbose = FALSE)
 				llkTmp<- scanOne(y=y, x=x, prdat=prd, vc=vc, intcovar=intcovar,
