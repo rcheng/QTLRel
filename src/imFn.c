@@ -1,5 +1,6 @@
 
 #include "xxx.h"
+#include <R_ext/Utils.h> //R_CheckUserInterrupt(void)
 
 /*--------------------------------
  mapping function
@@ -169,7 +170,7 @@ void conGenoPrs(int *mData,int n,double *dist,double *pos,int np,int* at, int gr
       r=mappingFuncInv(dist[n2]-dist[n1],method);
          r=rFn(r,gr);
       do{
-         if(stopIt) return;
+         R_CheckUserInterrupt();//if(stopIt) return;
          if(!bad2){
             if(at[ii+1]-1==n2) break;
          }
@@ -214,9 +215,9 @@ void conGenoPrs(int *mData,int n,double *dist,double *pos,int np,int* at, int gr
 
 //extern "C"{
    void conGenoPrc(int *mData,int *n,double *dist,double *pos,int *np,int* at,int *gr,int *method,double *pData,int *err){
-      signal(SIGINT, &userInt);
+      //signal(SIGINT, &userInt);
       conGenoPrs(mData,*n,dist,pos,*np,at,*gr,*method,pData,err);
-      if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
+      //if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
    }
 //}
 

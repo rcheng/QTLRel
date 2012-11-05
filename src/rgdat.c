@@ -1,5 +1,6 @@
 
 #include "xxx.h"
+#include <R_ext/Utils.h> //R_CheckUserInterrupt(void)
 
 void rgeno1();
 void rgeno2();
@@ -39,6 +40,7 @@ void rgeno1(int* data,int nr,int nc,int ninit,int* pedd,double* rr,int seed){
       error(_("recombinaton rate: too many SNPs.\n"));
    }
    for(i=ninit;i<nr;i++){
+      R_CheckUserInterrupt();
       //paternal gamete
       ii = pedd[i*4+1] - 1;
       if(ii>=0){
@@ -97,6 +99,7 @@ void rgeno2(int* data,int nr,int nc,int ninit,int* pedd,double* rr,int xchr,int 
    }
    if(xchr){
       for(i=ninit;i<nr;i++){
+         R_CheckUserInterrupt();
          //paternal gamete
          ii = pedd[i*4+1] - 1;
          if(ii>=0){
@@ -121,6 +124,7 @@ void rgeno2(int* data,int nr,int nc,int ninit,int* pedd,double* rr,int xchr,int 
       }
    }else{
       for(i=ninit;i<nr;i++){
+         R_CheckUserInterrupt();
          //paternal gamete
          ii = pedd[i*4+1] - 1;
          if(ii>=0){

@@ -9,6 +9,7 @@
 ****************************************************/
 
 #include "xxx.h"
+#include <R_ext/Utils.h> //R_CheckUserInterrupt(void)
 
 void ibsPr();
 void ibsFn();
@@ -21,7 +22,7 @@ void deltaFn();
 */
 //extern "C"{
    void ibsPrc(double* prA,int* nr,int* nc,double* ibs){
-         signal(SIGINT, &userInt);
+         //signal(SIGINT, &userInt);
          int nn;
          nn = (*nr)*((*nr)+1)/2;
          double* ptr[(*nr)*3]; for(int i=0; i<(*nr)*3; i++) ptr[i]=prA+i*(*nc);
@@ -29,28 +30,28 @@ void deltaFn();
          double* ibsp[nn]; for(int i=0; i<nn; i++) ibsp[i]=ibs+i*9;
 
          ibsPr(prAp,(*nr),(*nc),ibsp);
-         if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
+         R_CheckUserInterrupt();//if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
    }
 
    void ibsFnc(int* gdat,int* nr,int* nc,double* ibs){
-         signal(SIGINT, &userInt);
+         //signal(SIGINT, &userInt);
          int nn;
          nn = (*nr)*((*nr)+1)/2;
          int* gdatp[(*nr)]; for(int i=0;i<(*nr);i++) gdatp[i]=gdat+i*(*nc);
          double* ibsp[nn]; for(int i=0;i<nn;i++) ibsp[i]=ibs+i*9;
 
          ibsFn(gdatp,(*nr),(*nc),ibsp);
-         if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
+         R_CheckUserInterrupt();//if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
    }
 
    void deltaFnc(int* gdat,int* nr,int* nc,double* delta){
-         signal(SIGINT, &userInt);
+         //signal(SIGINT, &userInt);
          int nn;
          nn = (*nr)*((*nr)+1)/2;
          int* gdatp[(*nr)]; for(int i=0;i<(*nr);i++) gdatp[i]=gdat+i*(*nc);
          double* deltap[nn]; for(int i=0;i<nn;i++) deltap[i]=delta+i*5;
          deltaFn(gdatp,(*nr),(*nc),deltap);
-         if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
+         R_CheckUserInterrupt();//if(stopIt) {stopIt = 0; error(_("Exit without finish.\a\n"));}
    }
 //}
 
@@ -82,7 +83,7 @@ void ibs_Pr(double P2[][3], double P3[][3][3], double P4[][3][3][3], double P22[
 }
 
 void ibsPr(double*** prA,int nr,int nc,double** ibs){
-   if(stopIt) return;
+   R_CheckUserInterrupt();//if(stopIt) return;
    double Pa[3] = {1.0, 0.5, 0.0};
    double P2[3][3];
    for(int i=0; i<3; i++){
@@ -91,7 +92,7 @@ void ibsPr(double*** prA,int nr,int nc,double** ibs){
                  + (1-Pa[i])*(1-Pa[j]);
       }
    }
-   if(stopIt) return;
+   R_CheckUserInterrupt();//if(stopIt) return;
    double P3[3][3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
@@ -101,7 +102,7 @@ void ibsPr(double*** prA,int nr,int nc,double** ibs){
          }
       }
    }
-   if(stopIt) return;
+   R_CheckUserInterrupt();//if(stopIt) return;
    double P4[3][3][3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
@@ -113,7 +114,7 @@ void ibsPr(double*** prA,int nr,int nc,double** ibs){
          }
       }
    }
-   if(stopIt) return;
+   R_CheckUserInterrupt();//if(stopIt) return;
    double P22[3][3][3][3];
    for(int i=0; i<3; i++){
       for(int j=0; j<3; j++){
@@ -130,12 +131,12 @@ void ibsPr(double*** prA,int nr,int nc,double** ibs){
 //   int npairs = nr*(nr+1)/2;
 
 //   Rprintf("There are %d pairs:\n", npairs);
-   if(stopIt) return;
+   R_CheckUserInterrupt();//if(stopIt) return;
    for(int a=0;a<nr;a++){
       for(int b=0;b<=a;b++){
          for(int t=0; t<9; t++) ibs[ii][t] = 0.0;
          for(int k=0;k<nc;k++){
-            if(stopIt) return;
+            R_CheckUserInterrupt();//if(stopIt) return;
             ibs_Pr(P2, P3, P4, P22, a, b, prA, k, ibs, ii);
          }
          for(int t=0; t<9; t++) ibs[ii][t] /= nc;
@@ -226,7 +227,7 @@ void ibsFn(int** gdat,int nr,int nc,double** ibs){
       for(int b=0;b<=a;b++){
          for(int t=0; t<9; t++) s[t] = 0.0;
          for(int j=0; j<nc; j++){
-            if(stopIt) return;
+            R_CheckUserInterrupt();//if(stopIt) return;
             aa = 2.0*phi_2(a,a,gdat,j);
             bb = 2.0*phi_2(b,b,gdat,j);
             ab = 4.0*phi_2(a,b,gdat,j);
@@ -305,7 +306,7 @@ void deltaFn(int** gdat,int nr,int nc,double** delta){
       for(int b=a;b<nr;b++){
          for(int t=0; t<5; t++) s[t] = 0.0;
          for(int j=0; j<nc; j++){
-            if(stopIt) return;
+            R_CheckUserInterrupt();//if(stopIt) return;
             s[0] += _phi_2_(a,b,gdat,j);
             s[1] += dlt1(a,b,gdat,j);
             s[2] += dlt2(a,b,gdat,j);
