@@ -1,17 +1,21 @@
 
-2012/10/30 incorporated the pkolmogorov2x and psmirnov2x functions from R
-	ver 2.15.1, to avoid a harsh warning in R CMD CHECK
+2012/11/06 add functions qtl2rel and rel2qtl for converting data between
+   QTLRel and R/qtl formats. These two functions are provided by Karl Broman,
+   author of R/qtl.
 
-2012/10/30 filled in a missing sex value in pedF8 in the miscEx example data
+2012/10/31 copy 'ks.c' from 'stats' in R-2.15.1 to avoid a harsh warning
+   in R CMD CHECK when functions pkolmogorov2x and psmirnov2x are called
+   from 'stat' by '.C'; filled in a missing sex value in pedF8 in the miscEx
+   example data.
 
-2012/10/24 add functions qtl2rel and rel2qtl for converting data between
-   QTLRel and R/qtl formats
+2012/07/24 fix a bug in fitting interactive covariates in the case of additive
+   allelic effects, plus some other minor changes.
 
-2011/09/30 allow user to interrupt of 'cic' in addition to other conveniences
+2011/09/30 allow user to interrupt of 'cic' in addition to other conveniences.
 
-2011/07/21 scanOne is extended to multiple-allelic additive models
+2011/07/21 scanOne is extended to multiple-allelic additive models.
 
-2011/07/10 add a tutorial in doc and more comments in examples
+2011/07/10 add a tutorial in doc and more comments in examples.
 
 2011/06/27 remove error messages on certain platforms; add function 'ibs'.
 
@@ -31,5 +35,5 @@
    coefficients from pedigrees; add a function to create matrices that are
    associated with non-genetic random effects.
 
-2010/11/10 remove "R (>= 2.9.0)"
+2010/11/10 remove "R (>= 2.9.0)".
 

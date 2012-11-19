@@ -1,7 +1,8 @@
 citHeader("To cite QTLRel in publications use:")
 
 citEntry(entry="article",
-         title = "QTLRel: an R Package for Genome-wide Association Studies in which Relatedness is a Concern",
+         title = "QTLRel: an R Package for Genome-wide Association Studies
+                 in which Relatedness is a Concern",
          author = personList(person("Riyan", "Cheng"),
                              person("Mark", "Abney"),
 			     person("Abraham", "Palmer", "A."), 
@@ -19,7 +20,9 @@ citEntry(entry="article",
          )
 
 citEntry(entry="article",
-         title = "QTLRel: an R Package for Genome-wide Association Studies in which Relatedness is a Concern",
+         title = "Genome-wide association studies and the problem of relatedness
+                 among advanced intercross lines and other highly recombinant
+                 populations",
          author = personList(person("Riyan", "Cheng"),
                              person("Jackie", "Lim", "E."),
                              person("Kaitlin", "Samocha", "E."),

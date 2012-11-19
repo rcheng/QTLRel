@@ -7,7 +7,7 @@ export(aicVC,mAIC,
 	genoProb,genoImpute,genoPos,rem,
 	pedRecode,hapSim,genoSim,
 	pkolm,qkolm,qqPlot,plotit,plot.scanTwo,
-      cic,ibs,kinship,genMatrix)
+        cic,ibs,kinship,genMatrix)
 
 export(rel2qtl, qtl2rel)
 

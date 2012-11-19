@@ -2,11 +2,13 @@
 
 pk<- function(z, nx, ny = Inf){ # exaxt from R "stats"
    if(nx==Inf || ny==Inf){
-      pp <- .C("pkolmogorov2x", p = as.double(z),
-         as.integer(min(nx,ny)), PACKAGE = "QTLRel")$p
+      pp <- .C("pkolmogorov2x",
+               p = as.double(z),
+               as.integer(min(nx,ny)))$p
    }else{
-      pp <- .C("psmirnov2x", p = as.double(z),
-         as.integer(nx), as.integer(ny), PACKAGE = "QTLRel")$p
+      pp <- .C("psmirnov2x",
+               p = as.double(z),
+               as.integer(nx), as.integer(ny))$p
    }
 
    max(min(pp,1),0)

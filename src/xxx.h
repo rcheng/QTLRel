@@ -21,6 +21,8 @@
 #else
    #define _(String) (String)
 #endif
+#include <R.h>
+#include <Rmath.h>
 #include <R_ext/Print.h> // for Rprintf
 #include <R_ext/Utils.h> //R_CheckUserInterrupt(void)
 

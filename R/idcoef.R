@@ -307,7 +307,7 @@ cicTmp<- function(ped,ids,inter,df=3,ask=TRUE,verbose=TRUE){
                      top = as.integer(top),
                      as.character(infs),
                      as.character(outfs),
-                     DUP = FALSE)
+                     DUP = TRUE)
          }else{
             ids<- trim(ids)
             idx<- match(ids,ped$old)
@@ -324,7 +324,7 @@ cicTmp<- function(ped,ids,inter,df=3,ask=TRUE,verbose=TRUE){
                       as.character(infs),
                       idcf = as.double(idcf),
                       verbose = as.integer(verbose),
-                      DUP = FALSE)$idcf
+                      DUP = TRUE)$idcf
           }
       }
       if(verbose) cat("Done\n")
