@@ -26,7 +26,8 @@ fns4.2<- function(byte=4){
 
 fmaxSize<- function(){
    k<- 0
-   k<- .C("getsize",k=as.integer(k))$k
+   k<- .C("getsize",k=as.integer(k),
+          PACKAGE="QTLRel")$k
    
    fns4.2(k) # true if trackable
 }
@@ -40,7 +41,8 @@ fmaxSize<- function(){
 
 is.ll<- function(){
    s<- 0
-   s<- .C("llints",s=as.integer(s))$s
+   s<- .C("llints",s=as.integer(s),
+          PACKAGE="QTLRel")$s
    !(s<8)
 }
 
@@ -203,7 +205,8 @@ ans<- function(prompt="Continue?") {
 
 kinship<- function(ped,ids){
    k<- -999
-   k<- .C("getsize",k=as.integer(k))$k
+   k<- .C("getsize",k=as.integer(k),
+          PACKAGE="QTLRel")$k
       k<- sqrt(2^(8*k-1)-1)
       k<- floor(k)
    ped<- pedRecode(ped)
@@ -223,7 +226,8 @@ kinship<- function(ped,ids){
             nr = as.integer(nrow(ped)),
             nc = as.integer(ncol(ped)),
             ksp = as.double(ksp),
-            DUP = FALSE)
+            DUP = FALSE,
+            PACKAGE="QTLRel")
    ksp<- matrix(out$ksp,nrow=nrow(ped),byrow=TRUE)
       ksp<- ksp[idx,idx]
       rownames(ksp)<- colnames(ksp)<- trim(as.character(ids))
@@ -307,7 +311,8 @@ cicTmp<- function(ped,ids,inter,df=3,ask=TRUE,verbose=TRUE){
                      top = as.integer(top),
                      as.character(infs),
                      as.character(outfs),
-                     DUP = TRUE)
+                     DUP = TRUE,
+                     PACKAGE="QTLRel")
          }else{
             ids<- trim(ids)
             idx<- match(ids,ped$old)
@@ -324,7 +329,8 @@ cicTmp<- function(ped,ids,inter,df=3,ask=TRUE,verbose=TRUE){
                       as.character(infs),
                       idcf = as.double(idcf),
                       verbose = as.integer(verbose),
-                      DUP = TRUE)$idcf
+                      DUP = TRUE,
+                      PACKAGE="QTLRel")$idcf
           }
       }
       if(verbose) cat("Done\n")
@@ -395,7 +401,8 @@ genMatrix.cic<- function(x){
           AD = as.double(t(AD)),
           HH = as.double(t(HH)),
           MH = as.double(t(MH)),
-          DUP = FALSE)
+          DUP = FALSE,
+          PACKAGE="QTLRel")
    ksp<- matrix(o$ksp,nrow=nn,byrow=TRUE)
       rownames(ksp)<- colnames(ksp)<- ids
    ib<- diag(ksp)

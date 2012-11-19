@@ -298,7 +298,8 @@ pedRecode.0<- function(ped){
             recomb = as.double(rr),
             xchr = as.logical(xchr),
             seed = as.integer(seed),
-            DUP = FALSE)$gdata
+            DUP = FALSE,
+            PACKAGE="QTLRel")$gdata
    out[out==-99]<- NA
    out<- matrix(out,nrow=nr,byrow=TRUE)
       storage.mode(out)<- "integer"

@@ -4,11 +4,13 @@ pk<- function(z, nx, ny = Inf){ # exaxt from R "stats"
    if(nx==Inf || ny==Inf){
       pp <- .C("pkolmogorov2x",
                p = as.double(z),
-               as.integer(min(nx,ny)))$p
+               as.integer(min(nx,ny)),
+               PACKAGE="QTLRel")$p
    }else{
       pp <- .C("psmirnov2x",
                p = as.double(z),
-               as.integer(nx), as.integer(ny))$p
+               as.integer(nx), as.integer(ny),
+               PACKAGE="QTLRel")$p
    }
 
    max(min(pp,1),0)
@@ -34,7 +36,8 @@ pkolm <- function(z, nx, ny = Inf){
    z <- as.double(z)/sqrt(1/nx+1/ny)
    pp<- .C("kolm",
            z = as.double(z),
-           as.integer(length(z)))$z
+           as.integer(length(z)),
+           PACKAGE="QTLRel")$z
 
    max(min(pp,1),0)
 }
@@ -44,7 +47,8 @@ qkolm <- function(p, nx, ny = Inf){
       stop("probability should be between 0 and 1.")
    }
    func <-  function(y)
-     .C("kolm", y = as.double(y), as.integer(length(y)))$y - p
+     .C("kolm", y = as.double(y), as.integer(length(y)),
+        PACKAGE="QTLRel")$y - p
 
    xx <- (-1:100)^3
    for(i in 1:length(xx)) if(func(xx[i]) >= 0) break
@@ -92,7 +96,8 @@ Fn <- function(t,x){
       t = as.double(t),
       as.integer(length(t)),
       as.double(x),
-      as.integer(length(x)))$t
+      as.integer(length(x)),
+      PACKAGE="QTLRel")$t
 }
 
 qFn <- function(t,x){
@@ -106,7 +111,8 @@ qFn <- function(t,x){
       t = as.double(t),
       as.integer(length(t)),
       as.double(x),
-      as.integer(length(x)))$t
+      as.integer(length(x)),
+      PACKAGE="QTLRel")$t
 }
 
 qqPlot.default <- function(y, x = "norm", ...,

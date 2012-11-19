@@ -29,7 +29,8 @@ ibs.1<- function(prdat){
             nr = as.integer(nr),
             nc = as.integer(nc),
             ibsc = as.double(t(ibsc)),
-            DUP = FALSE)
+            DUP = FALSE,
+            PACKAGE="QTLRel")
 
    idcf<- matrix(out$ibsc,ncol=9,byrow=TRUE)
       colnames(idcf)<- paste("d",1:9,sep="")
@@ -77,7 +78,8 @@ ibs.2<- function(gdat){
             nr = as.integer(nr),
             nc = as.integer(nc),
             ibsc = as.double(t(ibsc)),
-            DUP = FALSE)
+            DUP = FALSE,
+            PACKAGE="QTLRel")
 
    idcf<- matrix(out$ibsc,ncol=9,byrow=TRUE)
       colnames(idcf)<- paste("d",1:9,sep="")
@@ -131,7 +133,8 @@ genMatrix.default<- function(x){
             nr = as.integer(nr),
             nc = as.integer(nc),
             deltac = as.double(t(deltac)),
-            DUP = FALSE)
+            DUP = FALSE,
+            PACKAGE="QTLRel")
 
    delta<- matrix(out$deltac,ncol=5,byrow=TRUE)
       colnames(delta)<- c("ksp","delta1","delta2","delta35","delta7")
