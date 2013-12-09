@@ -38,7 +38,7 @@ function(cross)
   if(any(chrtype =="X")) {
     # convert to simple 1/2/3 format
     for(i in which(chrtype=="X"))
-      cross$geno[[i]]$data <- qtl:::reviseXdata("f2", "simple", sexpgm, geno=cross$geno[[i]]$data)
+      cross$geno[[i]]$data <- qtl::reviseXdata("f2", "simple", sexpgm, geno=cross$geno[[i]]$data)
   }
 
   # create pedigree info
