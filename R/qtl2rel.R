@@ -12,10 +12,10 @@ function(cross)
   if(class(cross)[1] != "f2" || class(cross)[2] != "cross")
     stop("Input must be an intercross.")
 
-  n.ind <- qtl:::nind(cross)
+  n.ind <- qtl::nind(cross)
 
   # create IDs; I think they must be numeric
-  id <- qtl:::getid(cross)
+  id <- qtl::getid(cross)
   if(is.null(id))
     id <- 1:n.ind
   if(!is.numeric(id)) {
@@ -24,7 +24,7 @@ function(cross)
   }
 
   # deal with sex info
-  sexpgm <- qtl:::getsex(cross)
+  sexpgm <- qtl::getsex(cross)
   if(is.null(sexpgm$sex)) {
     warning("No sex information; treating all as females")
     sex <- factor(rep("F", n.ind), levels=c("F", "M"))
@@ -54,7 +54,7 @@ function(cross)
                     family=factor(c("F0","F0","F1","F1",rep("F1-1", n.ind)), levels=c("F0","F1","F1-1")))
 
   # combine genotypes into gdat
-  gdat <- qtl:::pull.geno(cross)
+  gdat <- qtl::pull.geno(cross)
   rownames(gdat) <- as.character(id)
 
   # pull out phenotypes
@@ -62,8 +62,8 @@ function(cross)
   rownames(pdat) <- as.character(id)
 
   # construct genetic map info
-  gmap <- data.frame(snp=factor(qtl:::markernames(cross)),
-                     chr=rep(names(cross$geno), qtl:::nmar(cross)),
+  gmap <- data.frame(snp=factor(qtl::markernames(cross)),
+                     chr=rep(names(cross$geno), qtl::nmar(cross)),
                      dist=unlist(lapply(cross$geno, function(a) as.numeric(a$map))))
 
   # return list
